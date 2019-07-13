@@ -1,40 +1,57 @@
-package com.example.rssfeedreader
+package com.example.rssfeedreader.ui.feedView
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rssfeedreader.R
+import com.example.rssfeedreader.models.FeedItem
+import com.example.rssfeedreader.ui.addNewFeedView.AddNewFeedActivity
+import com.example.rssfeedreader.ui.base.BaseActivity
+import kotlinx.android.synthetic.main.activity_rss_feed.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class RssFeedActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, RssFeedContract.View {
 
+    override fun initListView(feedItem: MutableList<FeedItem>) {
+        Log.e("AAAA", feedItem.toString())
+        val rssFeedAdapter = RssFeedAdapter(feedItem, this)
+        activity_rss_feed_recycler_view.adapter = rssFeedAdapter
+        rssFeedAdapter.notifyDataSetChanged()
+    }
+
+    lateinit var rssFeedPresenter: RssFeedContract.Presenter
+
+    override fun setPresenter(presenter: RssFeedContract.Presenter) {
+        rssFeedPresenter = presenter
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_rss_feed)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
+        setPresenter(RssFeedPresenter(this))
+        activity_rss_feed_recycler_view.layoutManager = LinearLayoutManager(this)
+        rssFeedPresenter.loadRssFeedForUrl("https://www.sciencemag.org/rss/news_current.xml")
     }
 
     override fun onBackPressed() {
@@ -65,23 +82,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_home -> {
+            R.id.nav_add_new_feed -> {
                 // Handle the camera action
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_tools -> {
-
+                val intent = Intent(this, AddNewFeedActivity::class.java).apply {
+                    //                    putExtra(EXTRA_MESSAGE, message)
+                }
+                startActivity(intent)
             }
             R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+                rssFeedPresenter.loadRssFeedForUrl("")
             }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
