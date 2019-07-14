@@ -1,6 +1,7 @@
 package com.example.rssfeedreader.ui.addNewFeedView
 
 import android.os.Bundle
+import android.widget.Toast
 import com.example.rssfeedreader.R
 import com.example.rssfeedreader.ui.base.BaseActivity
 
@@ -17,5 +18,6 @@ class AddNewFeedActivity : BaseActivity(), AddNewFeedContract.View {
         setContentView(R.layout.activity_add_new_feed)
 
         setPresenter(AddNewFeedPresenter(this))
+        Toast.makeText(this, "started", 5000).show()
     }
 }

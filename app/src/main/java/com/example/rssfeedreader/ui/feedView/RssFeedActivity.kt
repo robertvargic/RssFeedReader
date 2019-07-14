@@ -21,8 +21,6 @@ import me.toptas.rssconverter.RssFeed
 class RssFeedActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, RssFeedContract.View {
 
     override fun initListView(feedItem: RssFeed) {
-        Toast.makeText(this, "started", 5000).show()
-        Log.e("AAAA", feedItem.toString())
         val rssFeedAdapter = feedItem.items?.let { RssFeedAdapter(it, this) }
         activity_rss_feed_recycler_view.adapter = rssFeedAdapter
         rssFeedAdapter?.notifyDataSetChanged()
@@ -85,14 +83,14 @@ class RssFeedActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_add_new_feed -> {
-                // Handle the camera action
+                System.out.println("ajbok")
+                Toast.makeText(this, "started", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, AddNewFeedActivity::class.java).apply {
-                    //                    putExtra(EXTRA_MESSAGE, message)
                 }
                 startActivity(intent)
             }
             R.id.nav_share -> {
-                rssFeedPresenter.loadRssFeedForUrl("")
+                rssFeedPresenter.loadRssFeedForUrl("https://jalopnik.com/rss")
             }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
