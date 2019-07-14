@@ -10,20 +10,22 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssfeedreader.R
-import com.example.rssfeedreader.models.FeedItem
 import com.example.rssfeedreader.ui.addNewFeedView.AddNewFeedActivity
 import com.example.rssfeedreader.ui.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_rss_feed.*
+import kotlinx.android.synthetic.main.content_rss_feed.*
+import me.toptas.rssconverter.RssFeed
 
 class RssFeedActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, RssFeedContract.View {
 
-    override fun initListView(feedItem: MutableList<FeedItem>) {
+    override fun initListView(feedItem: RssFeed) {
+        Toast.makeText(this, "started", 5000).show()
         Log.e("AAAA", feedItem.toString())
-        val rssFeedAdapter = RssFeedAdapter(feedItem, this)
+        val rssFeedAdapter = feedItem.items?.let { RssFeedAdapter(it, this) }
         activity_rss_feed_recycler_view.adapter = rssFeedAdapter
-        rssFeedAdapter.notifyDataSetChanged()
+        rssFeedAdapter?.notifyDataSetChanged()
     }
 
     lateinit var rssFeedPresenter: RssFeedContract.Presenter

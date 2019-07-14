@@ -1,9 +1,11 @@
 package com.example.rssfeedreader.ui.feedView
 
-import android.util.Log
-import com.example.rssfeedreader.models.FeedItem
-import org.w3c.dom.Document
-import javax.xml.parsers.DocumentBuilderFactory
+import android.widget.Toast
+import com.example.rssfeedreader.networking.RetrofitUtil
+import com.example.rssfeedreader.networking.tasks.GetRssFeedTask
+import com.robertvargic.cryptochecker.networking.base.TaskListener
+import me.toptas.rssconverter.RssFeed
+import me.toptas.rssconverter.RssItem
 
 
 class RssFeedPresenter : RssFeedContract.Presenter {
@@ -15,50 +17,67 @@ class RssFeedPresenter : RssFeedContract.Presenter {
     }
 
     override fun loadRssFeedForUrl(url: String) {
-        var shit = FeedItem("title", "aa", "aa", "aa", "aa")
-        var feedItems = mutableListOf (shit)
-        rssFeedView.initListView(feedItems)
+//        var shit = FeedItem("title", "aa", "aa", "aa", "aa")
+//        var feedItems = mutableListOf (shit)
+//        rssFeedView.initListView(feedItems)
+        val getRssFeedTask = GetRssFeedTask(RetrofitUtil().createRetrofitForUrl(), url)
+        getRssFeedTask.execute(object: TaskListener<RssFeed>{
+            override fun onPreExecute() {
+            }
+
+            override fun onSuccess(result: RssFeed) {
+                System.out.println("starrrt")
+//                System.out.println(result)
+                rssFeedView.initListView(result)
+            }
+
+            override fun onError(error: Throwable) {
+                System.out.println("error")
+                System.out.println(error.toString())
+            }
+
+        })
     }
 
     override fun start() {
     }
 
-    private fun processXml(data: Document?): MutableList<FeedItem> {
-        lateinit var feedItems: MutableList<FeedItem>
-        if (data != null) {
-            val root = data.documentElement
-            val channel = root.childNodes.item(1)
-            val items = channel.childNodes
-            for (i in 0 until items.length) {
-                val currentChild = items.item(i)
-                if (currentChild.nodeName == "item") {
-                    val feedItem = FeedItem()
-                    val feedItemChilds = currentChild.childNodes
-                    for (j in 0 until feedItemChilds.length) {
-                        val currenctChild = feedItemChilds.item(j)
-                        if (currenctChild.nodeName == "title") {
-                            feedItem.title = currenctChild.textContent
-                        } else if (currenctChild.nodeName == "description") {
-                            feedItem.description = currenctChild.textContent
-                        } else if (currenctChild.nodeName == "pubDate") {
-                            feedItem.pubDate = currenctChild.textContent
-                        } else if (currenctChild.nodeName == "link") {
-                            feedItem.link = currenctChild.textContent
-                        } else if (currenctChild.nodeName == "media:thumbnail") {
-                            //this will return us thumbnail url
-                            val url = currenctChild.attributes.item(0).textContent
-                            feedItem.thumbnailUrl = url
-                        }
-                    }
-                    feedItems.add(feedItem)
-                }
-            }
-            Log.e("stuff", feedItems.toString())
-            return feedItems
-        }
-
-        return feedItems
-    }
+//    private fun processXml(data: Document?): MutableList<FeedItem> {
+//        lateinit var feedItems: MutableList<FeedItem>
+//        if (data != null) {
+//            val root = data.documentElement
+//            val channel = root.childNodes.item(1)
+//            val items = channel.childNodes
+//            for (i in 0 until items.length) {
+//                val currentChild = items.item(i)
+//                if (currentChild.nodeName == "item") {
+//                    val feedItem = FeedItem()
+//                    val feedItemChilds = currentChild.childNodes
+//                    for (j in 0 until feedItemChilds.length) {
+//                        val currenctChild = feedItemChilds.item(j)
+//                        if (currenctChild.nodeName == "title") {
+//                            feedItem.title = currenctChild.textContent
+//                        } else if (currenctChild.nodeName == "description") {
+//                            feedItem.description = currenctChild.textContent
+//                        } else if (currenctChild.nodeName == "pubDate") {
+//                            feedItem.pubDate = currenctChild.textContent
+//                        } else if (currenctChild.nodeName == "link") {
+//                            feedItem.link = currenctChild.textContent
+//                        } else if (currenctChild.nodeName == "media:thumbnail") {
+//                            //this will return us thumbnail url
+//                            val url = currenctChild.attributes.item(0).textContent
+//                            feedItem.thumbnailUrl = url
+//                        }
+//                    }
+//                    feedItems.add(feedItem)
+//                }
+//            }
+//            Log.e("stuff", feedItems.toString())
+//            return feedItems
+//        }
+//
+//        return feedItems
+//    }
 
     var rssFeed = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
             "<rss version=\"2.0\" xmlns:media=\"http://search.yahoo.com/mrss/\">\n" +
