@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssfeedreader.R
@@ -51,7 +52,18 @@ class RssFeedActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedL
         navView.setNavigationItemSelectedListener(this)
         setPresenter(RssFeedPresenter(this))
         activity_rss_feed_recycler_view.layoutManager = LinearLayoutManager(this)
-        rssFeedPresenter.loadRssFeedForUrl("https://www.sciencemag.org/rss/news_current.xml")
+        checkIntent()
+    }
+
+    private fun checkIntent() {
+
+        val intent = intent
+
+        if (intent.getStringExtra("1") != null) {
+            var url: String
+            url = intent.getStringExtra("1")
+            rssFeedPresenter.loadRssFeedForUrl(url)
+        }
     }
 
     override fun onBackPressed() {

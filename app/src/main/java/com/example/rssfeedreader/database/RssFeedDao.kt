@@ -14,6 +14,6 @@ interface RssFeedDao {
     @Query("SELECT * FROM urlTable")
     fun getAll(): List<RssFeedUrl>
 
-    @Query("DELETE from urlTable WHERE id = :userId")
-    fun deleteUser(rssFeedUrl: String)
+    @Query("DELETE from urlTable WHERE url = :rssFeedUrl")
+    fun deleteRssFeedItem(rssFeedUrl: String)
 }

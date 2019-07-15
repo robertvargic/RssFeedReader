@@ -8,6 +8,6 @@ class RssFeedReader : Application() {
     lateinit var database: UrlDatabase
     override fun onCreate() {
         super.onCreate()
-        database = UrlDatabase.getDatabaseInstance(baseContext)!!
+        database = UrlDatabase.getDatabaseInstance(this)!!
     }
 }

@@ -8,6 +8,7 @@ import com.example.rssfeedreader.models.RssFeedUrl
 
 @Database(entities = [RssFeedUrl::class], version = 1)
 abstract class UrlDatabase : RoomDatabase() {
+
     abstract fun rssFeedDao(): RssFeedDao
 
     companion object {
