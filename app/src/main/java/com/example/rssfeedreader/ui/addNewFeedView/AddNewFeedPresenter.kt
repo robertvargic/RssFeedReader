@@ -10,6 +10,11 @@ class AddNewFeedPresenter : AddNewFeedContract.Presenter {
 
     lateinit var addNewFeedView: AddNewFeedContract.View
 
+    override fun deleteUser(rssItem: String, database: UrlDatabase) {
+        database.rssFeedDao().deleteRssFeedItem(rssItem)
+        getRssFeedsFromDatabase(database)
+    }
+
     constructor(addNewFeedView: AddNewFeedContract.View) {
         this.addNewFeedView = addNewFeedView
     }

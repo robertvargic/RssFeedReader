@@ -12,7 +12,6 @@ import com.example.rssfeedreader.models.RssFeedUrl
 import com.example.rssfeedreader.ui.base.BaseActivity
 import com.example.rssfeedreader.ui.feedView.RssFeedActivity
 import kotlinx.android.synthetic.main.activity_add_new_feed.*
-import kotlinx.android.synthetic.main.content_rss_feed.*
 
 class AddNewFeedActivity : BaseActivity(), AddNewFeedContract.View {
 
@@ -21,6 +20,10 @@ class AddNewFeedActivity : BaseActivity(), AddNewFeedContract.View {
     override fun initListView(feedItems: List<RssFeedUrl>) {
         var context = this
         val listener = object : AddNewFeedAdapter.OnRssFeedClickListener {
+            override fun onDelete(rssItem: String) {
+                addNewFeedPresenter.deleteUser(rssItem, UrlDatabase.getDatabaseInstance(context)!!)
+            }
+
             override fun onClick(url: String) {
                 val intent = Intent()
                 intent.setClass(context, RssFeedActivity::class.java)

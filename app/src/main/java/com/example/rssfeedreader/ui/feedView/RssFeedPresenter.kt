@@ -1,6 +1,8 @@
 package com.example.rssfeedreader.ui.feedView
 
 import android.widget.Toast
+import com.example.rssfeedreader.database.UrlDatabase
+import com.example.rssfeedreader.models.RssFeedUrl
 import com.example.rssfeedreader.networking.RetrofitUtil
 import com.example.rssfeedreader.networking.tasks.GetRssFeedTask
 import com.robertvargic.cryptochecker.networking.base.TaskListener
@@ -26,13 +28,10 @@ class RssFeedPresenter : RssFeedContract.Presenter {
             }
 
             override fun onSuccess(result: RssFeed) {
-                System.out.println("starrrt")
-//                System.out.println(result)
                 rssFeedView.initListView(result)
             }
 
             override fun onError(error: Throwable) {
-                System.out.println("error")
                 System.out.println(error.toString())
             }
 

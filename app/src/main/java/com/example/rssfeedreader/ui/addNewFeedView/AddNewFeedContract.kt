@@ -15,5 +15,6 @@ object AddNewFeedContract {
     interface Presenter : BasePresenter {
         fun addRssFeedToDatabase(database: UrlDatabase, rrsFeedUrl: RssFeedUrl)
         fun getRssFeedsFromDatabase(database: UrlDatabase)
+        fun deleteUser(rssItem: String, database: UrlDatabase)
     }
 }

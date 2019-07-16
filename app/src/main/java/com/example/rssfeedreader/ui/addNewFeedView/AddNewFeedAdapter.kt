@@ -34,10 +34,12 @@ class AddNewFeedAdapter(
         fun bindData(rssFeedItem: RssFeedUrl) {
             itemView.list_item_title.text = rssFeedItem.url
             itemView.setOnClickListener { onRssFeedClickListener.onClick(rssFeedItem.url) }
+            itemView.list_item_delete_button.setOnClickListener {onRssFeedClickListener.onDelete(rssFeedItem.url)}
         }
     }
 
     interface OnRssFeedClickListener {
         fun onClick(url: String)
+        fun onDelete(rssItem: String)
     }
 }
